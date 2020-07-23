@@ -14,7 +14,7 @@
         position: absolute;
     }
 
-    #canvasContainer {
+    .canvas-container {
         left: 0;
         top: 0;
         width: 100%;
@@ -49,8 +49,11 @@
             <div id="resultContainer" class="inner-container">
                 <canvas id="resultCanvas" width="960" height="540"></canvas>
             </div>
-            <div id="operationalContainer" class="inner-container">
-                <canvas id="operationalCanvas" width="960" height="540"></canvas>
+            <div class="inner-container canvas-container">
+                <canvas class="area-operations-canvas" width="960" height="540"></canvas>
+            </div>
+            <div class="inner-container canvas-container">
+                <canvas class="area-operations-canvas" width="960" height="540"></canvas>
             </div>
             <div id="videoControllerContainer" class="inner-container">
                 <a class="btn-floating btn waves-effect waves-light" onClick="forwardVideo(-10)"><i class="material-icons">replay_10</i></a>
@@ -78,9 +81,9 @@
 
 {% block extra_js %}
 <script>
-    /**********************
-     *  Video Controller  *
-     **********************/
+    /********************
+     * Video Controller *
+     ********************/
     var video = $("#video")[0];
     var isPlaying = -1;   // -1: Pausing, 1: Playing
     function switchVideo() {
@@ -98,18 +101,44 @@
     }
 
     /*******************
-     *  Chain Analyze  *
+     * Area Operations * 
      *******************/
-    var regions = [
-        {xmin: 150, ymin:86, width:0},
+    var areas = [
+        {xmin: 139, ymin:80, xmax:331, ymax: 438}, // 1P
+        // 2Pについてはまだ未設定
     ]
+
+    function drawArea() {
+        var areaCanvas = $(".area-operations-canvas")
+        /* 1P */
+        var x = areas[0].xmin,
+            y = areas[0].ymin;
+        var width  = areas[0].xmax - x;
+            height = areas[0].ymax - y; 
+        areaCanvas[0].getContext('2d').strokeRect(x, y, width, height);;
+    }
+    drawArea();
+
+    /******************
+     * Chain Analysis *
+     ******************/
     var capturedCanvas = $("#capturedCanvas")[0];
-    function captureBoard() {
+    function activateChainAnalysis() {
         capturedCanvas.getContext('2d').drawImage(video, 0, 0, video.clientWidth, video.clientHeight);
-        data = capturedCanvas.toDataURL("image/jpeg");
+        var imageData = capturedCanvas.toDataURL("image/jpeg");
+        $.ajax({
+            'url': '{% url "app:chain_analysis" %}',
+            'type': 'POST',
+            'data': {
+                'image': imageData,
+            },
+            'dataType': 'json'
+        }).done(
+
+        );
     }
 
-    setInterval(captureBoard, 200);
+    setInterval(activateChainAnalysis, 200);
 
 
 </script>
