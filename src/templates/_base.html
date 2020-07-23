@@ -1,0 +1,42 @@
+<!doctype html>
+{% load static %}
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block page_title %}{% endblock %}</title>
+
+    {# --- css --- #}
+    <link rel="stylesheet" href="{% static 'css/materialize.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style type="text/css">
+        body > .container {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+<nav>
+    <div class="nav-wrapper">
+        <a href="" class="brand-logo">Puyo Puyo Analyzer</a>
+        <!-- <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="">Menu</a></li>
+        </ul> -->
+    </div>
+</nav>
+<div class="ui container">
+    {% include '_message.html' %}
+    {% block content %}{% endblock %}
+</div>
+
+{# --- js --- #}
+<script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/materialize.min.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
