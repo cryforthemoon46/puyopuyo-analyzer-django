@@ -12,6 +12,7 @@ class ChainAnalysisView(View):
         captured_image_data = request.POST["captured_image_data"]
         chain_analysis_usecase = ChainAnalysisUseCase(board_areas,
                                                       captured_image_data)
+        chain_analysis_usecase.make_boards()
         
 
 chain_analysis = ChainAnalysisView.as_view()
