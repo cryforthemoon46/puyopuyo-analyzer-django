@@ -103,7 +103,7 @@
     /*******************
      * Area Operations * 
      *******************/
-    var areas = [
+    var boardAreas = [
         {xmin: 139, ymin:80, xmax:331, ymax: 438}, // 1P
         // 2Pについてはまだ未設定
     ]
@@ -111,10 +111,10 @@
     function drawArea() {
         var areaCanvas = $(".area-operations-canvas")
         /* 1P */
-        var x = areas[0].xmin,
-            y = areas[0].ymin;
-        var width  = areas[0].xmax - x;
-            height = areas[0].ymax - y; 
+        var x = boardAreas[0].xmin,
+            y = boardAreas[0].ymin;
+        var width  = boardAreas[0].xmax - x;
+            height = boardAreas[0].ymax - y; 
         areaCanvas[0].getContext('2d').strokeRect(x, y, width, height);;
     }
     drawArea();
@@ -125,12 +125,13 @@
     var capturedCanvas = $("#capturedCanvas")[0];
     function activateChainAnalysis() {
         capturedCanvas.getContext('2d').drawImage(video, 0, 0, video.clientWidth, video.clientHeight);
-        var imageData = capturedCanvas.toDataURL("image/jpeg");
+        var capturedImageData = capturedCanvas.toDataURL("image/jpeg");
         $.ajax({
             'url': '{% url "app:chain_analysis" %}',
             'type': 'POST',
             'data': {
-                'image': imageData,
+                'board_areas': JSON.stringify(boardAreas),
+                'captured_image_data': capturedImageData,
             },
             'dataType': 'json'
         }).done(
@@ -138,7 +139,7 @@
         );
     }
 
-    setInterval(activateChainAnalysis, 200);
+    setInterval(activateChainAnalysis, 1000);
 
 
 </script>
