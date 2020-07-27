@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+from ..board import Board
 from ..service import *
 
 
@@ -12,13 +13,11 @@ class ChainAnalysisUseCase:
         self._board_areas = board_areas
         self._captured_image_data = captured_image_data
 
-    def make_boards(self):
-        captured_image = image_data_to_ndarray(self._captured_image_data)
+    def make_boards(self) -> List[Board]:
+        captured_image = image_data_to_image(self._captured_image_data)
         boards = []
         for board_area in self._board_areas:
             board_image = trim_image(captured_image, board_area["xmin"],
                                      board_area["ymin"], board_area["xmax"],
                                      board_area["ymax"])
-
-            # boards.append(board_image)
         return
