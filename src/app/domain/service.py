@@ -99,8 +99,6 @@ def calc_zncc(puyo_image: np.ndarray, template_image: np.ndarray) -> float:
     puyo_image -= np.mean(puyo_image)
     puyo_image = cv2.resize(puyo_image, (PUYO_SIZE, PUYO_SIZE))
     puyo_image = np.array(puyo_image, dtype="float")
-
-    # template_image -= np.mean(template_image)
     numerator = np.sum(puyo_image * template_image)
     denominator = np.sqrt(np.sum(puyo_image ** 2)) * np.sqrt(
         np.sum(template_image ** 2))
